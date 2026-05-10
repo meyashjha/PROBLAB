@@ -5,7 +5,7 @@ import { marketSnapshotService } from '../services/marketSnapshot.service';
 import { probabilityOptionService } from '../services/probabilityOption.service';
 import type { ApiResponse } from '@parlay-tokens/shared';
 
-const router = Router();
+const router: Router = Router();
 
 router.get('/scored', async (req, res) => {
   try {

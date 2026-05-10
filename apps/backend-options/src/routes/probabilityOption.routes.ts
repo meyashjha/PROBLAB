@@ -9,7 +9,7 @@ import {
 } from '@parlay-tokens/shared';
 import { walletAuth, adminAuth } from '@parlay-tokens/backend-shared';
 
-const router = Router();
+const router: Router = Router();
 
 /** Sanitize error messages for client responses */
 function safeErrorMessage(fallback: string): string {

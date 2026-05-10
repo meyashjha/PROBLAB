@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 import { solanaService, jupiterService } from '@parlay-tokens/backend-shared';
 import type { HealthCheckResponse } from '@parlay-tokens/shared';
 
-const router = Router();
+const router: Router = Router();
 
 router.get('/', async (req, res) => {
   const services = {

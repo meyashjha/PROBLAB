@@ -2,7 +2,7 @@ import { Router } from 'express';
 import { jupiterService } from '@parlay-tokens/backend-shared';
 import type { ApiResponse } from '@parlay-tokens/shared';
 
-const router = Router();
+const router: Router = Router();
 
 router.get('/events', async (req, res) => {
   try {

@@ -3,7 +3,7 @@ import { quoteService } from '../services/quote.service';
 import type { ApiResponse } from '@parlay-tokens/shared';
 import { z } from 'zod';
 
-const router = Router();
+const router: Router = Router();
 
 /**
  * POST /api/quote/parlay
