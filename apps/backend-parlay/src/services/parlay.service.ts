@@ -34,7 +34,7 @@ export class ParlayService {
 
     // Calculate quote using the quote engine
     const quote = await quoteService.calculateParlayQuote(
-      input.events.map(e => ({
+      input.events.map((e: any) => ({
         eventId: e.eventId,
         marketId: e.marketId,
         selectedOutcome: e.selectedOutcome,
@@ -76,16 +76,16 @@ export class ParlayService {
     const potentialPayout = quote.potentialPayout;
 
     // Find the latest settlement date
-    const settlementDates = input.events.map(e => 
+    const settlementDates = input.events.map((e: any) => 
       new Date(e.settlementDate)
     );
-    const finalSettlementDate = new Date(Math.max(...settlementDates.map(d => d.getTime())));
+    const finalSettlementDate = new Date(Math.max(...settlementDates.map((d: any) => d.getTime())));
 
     // Create parlay document with quote data
     // Status is 'active' immediately since payment is already verified
     const parlay = new ParlayModel({
       walletAddress: input.walletAddress,
-      events: input.events.map(e => ({
+      events: input.events.map((e: any) => ({
         ...e,
         settlementDate: new Date(e.settlementDate),
         status: 'active',
@@ -140,7 +140,7 @@ export class ParlayService {
     }
 
     // Check if any events have already settled (timing exploit detection)
-    const hasSettledEvents = parlay.events.some(e => e.status !== 'active');
+    const hasSettledEvents = parlay.events.some((e: any) => e.status !== 'active');
     if (hasSettledEvents) {
       // Mark as expired to prevent exploit
       parlay.status = 'expired';
@@ -251,7 +251,7 @@ export class ParlayService {
       // Need to read the event to determine win/loss
       const parlay = await ParlayModel.findById(parlayId);
       if (!parlay) throw new Error('Parlay not found');
-      const event = parlay.events.find(e => e.eventId === eventId);
+      const event = parlay.events.find((e: any) => e.eventId === eventId);
       if (!event) throw new Error('Event not found in parlay');
 
       eventStatus = event.selectedOutcome === actualOutcome ? 'won' : 'lost';
@@ -276,7 +276,7 @@ export class ParlayService {
     const parlay = await ParlayModel.findById(parlayId);
     if (!parlay) return;
 
-    const hasLostEvent = parlay.events.some(e => e.status === 'lost');
+    const hasLostEvent = parlay.events.some((e: any) => e.status === 'lost');
 
     // If ANY event is lost, mark parlay as lost
     if (hasLostEvent && parlay.status === 'active') {
@@ -289,12 +289,12 @@ export class ParlayService {
     }
 
     // Check if all events are settled
-    const allSettled = parlay.events.every(e =>
+    const allSettled = parlay.events.every((e: any) =>
       e.status === 'won' || e.status === 'lost' || e.status === 'cancelled'
     );
 
     if (allSettled && parlay.status === 'active') {
-      const allWon = parlay.events.every(e => e.status === 'won');
+      const allWon = parlay.events.every((e: any) => e.status === 'won');
       const newStatus = allWon ? 'won' : 'lost';
       console.log(allWon
         ? `🎉 Parlay ${parlayId} WON! All events correct!`
