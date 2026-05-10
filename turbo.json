@@ -1,4 +1,9 @@
 {
+  "globalEnv": [
+    "VITE_PARLAY_API_URL",
+    "VITE_OPTIONS_API_URL",
+    "VITE_SOLANA_NETWORK"
+  ],
   "tasks": {
     "build": {
       "dependsOn": ["^build"],
