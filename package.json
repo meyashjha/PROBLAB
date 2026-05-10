@@ -1,0 +1,23 @@
+{
+  "name": "prob-lab",
+  "private": true,
+  "packageManager": "bun@1.3.10",
+  "workspaces": [
+    "apps/backend-parlay",
+    "apps/backend-options",
+    "apps/backend-shared",
+    "apps/frontend",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "turbo run dev",
+    "dev:parlay": "turbo run dev --filter=@parlay-tokens/backend-parlay",
+    "dev:options": "turbo run dev --filter=@parlay-tokens/backend-options",
+    "dev:frontend": "turbo run dev --filter=@parlay-tokens/frontend",
+    "build": "turbo run build",
+    "lint": "turbo run lint"
+  },
+  "devDependencies": {
+    "turbo": "^2.0.0"
+  }
+}
