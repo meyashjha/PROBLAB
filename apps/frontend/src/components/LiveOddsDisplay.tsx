@@ -1,5 +1,5 @@
 import { FC, useState, useEffect } from 'react';
-import { ApiService } from '../services/api.service';
+import { API_CONFIG } from '../config/api';
 
 interface LiveOddsProps {
   events: Array<{
@@ -39,7 +39,7 @@ export const LiveOddsDisplay: FC<LiveOddsProps> = ({
       setLoading(true);
       setError(null);
 
-      const response = await fetch('http://localhost:3001/api/quote/parlay', {
+      const response = await fetch(`${API_CONFIG.PARLAY_API_URL}/api/quote/parlay`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
