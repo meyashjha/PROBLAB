@@ -1,4 +1,4 @@
-import { FC, useState, useEffect, useCallback } from 'react';
+import { FC, useState, useEffect, useCallback, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import { ApiService } from '../services/api.service';
@@ -66,6 +66,9 @@ export const ProbabilityOptionsPage: FC = () => {
   // Expanded score card
   const [expandedScore, setExpandedScore] = useState<string | null>(null);
 
+  // Ref for scrolling to options chain section
+  const chainSectionRef = useRef<HTMLDivElement>(null);
+
   // ─── Load markets ───────────────────────────────────────────────
   useEffect(() => {
     loadMarkets();
@@ -79,7 +82,6 @@ export const ProbabilityOptionsPage: FC = () => {
         setMarkets(response.data.markets || []);
       }
     } catch (error) {
-      console.error('Error loading scored markets:', error);
       toast.error('Failed to load markets');
     } finally {
       setLoading(false);
@@ -127,10 +129,13 @@ export const ProbabilityOptionsPage: FC = () => {
         });
       }
     } catch (error) {
-      console.error('Error loading options chain:', error);
       toast.error('Failed to load options chain');
     } finally {
       setLoadingChain(false);
+      // Scroll to the options chain section after render
+      setTimeout(() => {
+        chainSectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 100);
     }
   }, []);
 
@@ -156,7 +161,6 @@ export const ProbabilityOptionsPage: FC = () => {
         setPayoffData(response.data);
       }
     } catch (error) {
-      console.error('Error loading payoff:', error);
     } finally {
       setLoadingPayoff(false);
     }
@@ -456,7 +460,7 @@ export const ProbabilityOptionsPage: FC = () => {
 
         {/* ─── Options Chain (when market selected) ──────────────── */}
         {selectedMarket && (
-          <div className="space-y-6">
+          <div ref={chainSectionRef} className="space-y-6">
             {/* Divider */}
             <div className="flex items-center gap-3">
               <div className="divider-line flex-1" />

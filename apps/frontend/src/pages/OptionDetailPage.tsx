@@ -40,7 +40,6 @@ export const OptionDetailPage: FC = () => {
         navigate('/my-portfolio');
       }
     } catch (error) {
-      console.error('Error loading option:', error);
       toast.error('Failed to load option');
       navigate('/my-portfolio');
     } finally {
@@ -60,7 +59,6 @@ export const OptionDetailPage: FC = () => {
         toast.success('Option value updated');
       }
     } catch (error) {
-      console.error('Error updating value:', error);
       toast.error('Failed to update value');
     } finally {
       setUpdating(false);
@@ -86,7 +84,6 @@ export const OptionDetailPage: FC = () => {
         loadOption();
       }
     } catch (error: any) {
-      console.error('Error exercising option:', error);
       toast.error(error.response?.data?.error?.message || 'Failed to exercise option');
     } finally {
       setExercising(false);

@@ -68,7 +68,6 @@ export const CreateParlayPage: FC = () => {
         setPlatformWallet(response.data.address);
       }
     } catch (error) {
-      console.error('Error loading platform wallet:', error);
     }
   };
 
@@ -84,7 +83,6 @@ export const CreateParlayPage: FC = () => {
         setEvents(response.data.events || []);
       }
     } catch (error) {
-      console.error('Error loading events:', error);
       toast.error('Failed to load events');
     } finally {
       setLoading(false);
@@ -181,7 +179,6 @@ export const CreateParlayPage: FC = () => {
         toast.error(response.error?.message || 'Failed to create parlay', { id: 'create' });
       }
     } catch (error: any) {
-      console.error('Error creating parlay:', error);
       
       // Provide helpful error messages
       if (error.message?.includes('User rejected')) {

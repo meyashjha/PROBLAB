@@ -33,8 +33,9 @@ export const CreateOptionPage: FC = () => {
   // Get pre-filled data from navigation state
   const state = location.state as LocationState | null;
 
-  // Form state
+  // Form state — use a string for display so user can freely type/backspace
   const [notionalAmount, setNotionalAmount] = useState(1);
+  const [notionalDisplay, setNotionalDisplay] = useState('1');
   const [optionType, setOptionType] = useState<'CALL' | 'PUT'>(state?.optionType || 'CALL');
   
   // Calculated values
@@ -112,7 +113,6 @@ export const CreateOptionPage: FC = () => {
         setPayoffData(payoffResponse.data);
       }
     } catch (error) {
-      console.error('Error loading quote:', error);
       toast.error('Failed to load option quote');
     } finally {
       setLoading(false);
@@ -184,11 +184,38 @@ export const CreateOptionPage: FC = () => {
         throw new Error('Failed to create option');
       }
     } catch (error: any) {
-      console.error('Error creating option:', error);
       toast.error(error.message || 'Failed to create option', { id: 'create' });
       toast.dismiss('payment');
     } finally {
       setCreating(false);
+    }
+  };
+
+  // ─── Notional input handlers ─────────────────────────────────────
+  // Allow free typing (including clearing to empty), only clamp on blur
+  const handleNotionalChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const raw = e.target.value;
+    setNotionalDisplay(raw);
+
+    // Update the numeric state in real-time for valid numbers
+    const parsed = parseFloat(raw);
+    if (!isNaN(parsed) && parsed > 0) {
+      setNotionalAmount(parsed);
+    }
+  };
+
+  const handleNotionalBlur = () => {
+    const parsed = parseFloat(notionalDisplay);
+    if (isNaN(parsed) || parsed < 0.1) {
+      // Clamp to minimum on blur
+      setNotionalAmount(0.1);
+      setNotionalDisplay('0.1');
+    } else if (parsed > 100) {
+      setNotionalAmount(100);
+      setNotionalDisplay('100');
+    } else {
+      setNotionalAmount(parsed);
+      setNotionalDisplay(String(parsed));
     }
   };
 
@@ -358,8 +385,9 @@ export const CreateOptionPage: FC = () => {
                   min="0.1"
                   max="100"
                   step="0.1"
-                  value={notionalAmount}
-                  onChange={(e) => setNotionalAmount(Math.max(0.1, parseFloat(e.target.value) || 0.1))}
+                  value={notionalDisplay}
+                  onChange={handleNotionalChange}
+                  onBlur={handleNotionalBlur}
                   className="input flex-1 text-lg font-semibold"
                 />
                 <span className="muted-copy font-medium">SOL</span>

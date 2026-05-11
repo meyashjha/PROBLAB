@@ -41,7 +41,6 @@ export const ParlayDetailPage: FC = () => {
         setParlay(response.data);
       }
     } catch (error) {
-      console.error('Error loading parlay:', error);
       toast.error('Failed to load parlay');
     } finally {
       setLoading(false);
@@ -55,7 +54,6 @@ export const ParlayDetailPage: FC = () => {
         setBackendWallet(response.data.address);
       }
     } catch (error) {
-      console.error('Error loading backend wallet:', error);
     }
   };
 
@@ -92,7 +90,6 @@ export const ParlayDetailPage: FC = () => {
         toast.error(response.error?.message || 'Failed to confirm payment');
       }
     } catch (error: any) {
-      console.error('Payment error:', error);
       toast.error(error.message || 'Payment failed');
     } finally {
       setPaying(false);
@@ -120,7 +117,6 @@ export const ParlayDetailPage: FC = () => {
         toast.error(response.error?.message || 'Failed to claim payout');
       }
     } catch (error: any) {
-      console.error('Claim error:', error);
       toast.error(error.response?.data?.error?.message || 'Claim failed');
     } finally {
       setClaiming(false);

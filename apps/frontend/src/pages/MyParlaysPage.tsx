@@ -42,38 +42,25 @@ export const MyParlaysPage: FC = () => {
 
     try {
       setLoading(true);
-      console.log('🔍 Fetching parlays for wallet:', publicKey.toBase58());
       
       const [parlaysResponse, optionsResponse] = await Promise.all([
         ApiService.getParlaysByWallet(publicKey.toBase58()),
         ApiService.getOptionsByWallet(publicKey.toBase58()),
       ]);
       
-      console.log('📊 Parlays response:', parlaysResponse);
-      console.log('📊 Options response:', optionsResponse);
       
       if (parlaysResponse.success && parlaysResponse.data) {
-        console.log('✅ Found parlays:', parlaysResponse.data.length);
-        console.log('📋 Parlay statuses:', parlaysResponse.data.map((p: Parlay) => ({ id: p._id, status: p.status })));
         setParlays(parlaysResponse.data);
       } else {
-        console.error('❌ Parlays response not successful:', parlaysResponse);
         setParlays([]);
       }
       
       if (optionsResponse.success && optionsResponse.data) {
-        console.log('✅ Found options:', optionsResponse.data.length);
         setOptions(optionsResponse.data);
       } else {
-        console.error('❌ Options response not successful:', optionsResponse);
         setOptions([]);
       }
     } catch (error) {
-      console.error('❌ Error loading data:', error);
-      if (error instanceof Error) {
-        console.error('Error message:', error.message);
-        console.error('Error stack:', error.stack);
-      }
       // Set empty arrays on error to prevent stale data
       setParlays([]);
       setOptions([]);
@@ -88,14 +75,12 @@ export const MyParlaysPage: FC = () => {
     if (filter === 'won') {
       // Include won, claimed, and any parlay that has been paid out
       const isWon = parlay.status === 'won' || parlay.status === 'claimed';
-      console.log(`🔍 Filtering parlay ${parlay._id}: status=${parlay.status}, isWon=${isWon}`);
       return isWon;
     }
     if (filter === 'lost') return parlay.status === 'lost' || parlay.status === 'expired';
     return parlay.status === filter;
   });
 
-  console.log(`🎯 Current filter: ${filter}, Total parlays: ${parlays.length}, Filtered: ${filteredParlays.length}`);
 
   const filteredOptions = options.filter((option) => {
     if (filter === 'all') return true;
