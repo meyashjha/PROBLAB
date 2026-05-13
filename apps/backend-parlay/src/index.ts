@@ -12,6 +12,10 @@ import jupiterRoutes from './routes/jupiter.routes';
 
 const app = express();
 
+// Trust the first proxy (Render's load balancer) so express-rate-limit
+// can read the real client IP from X-Forwarded-For
+app.set('trust proxy', 1);
+
 // ─── Security Middleware ────────────────────────────────────────────
 
 // Request body size limit (prevent DoS via large payloads)
